@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vit_dart_extensions/vit_dart_extensions.dart';
-import 'package:vit_markdown/usecases/tokeniza_by_lang.dart';
+import 'package:vit_markdown/usecases/tokenize_by_lang.dart';
 
 void main() {
   group('Tokenize a Bash script correctly', () {

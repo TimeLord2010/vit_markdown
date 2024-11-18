@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vit_markdown/data/enums/token_type.dart';
 
-import '../../usecases/tokeniza_by_lang.dart';
+import '../../usecases/tokenize_by_lang.dart';
 
 class VitCodeBlock extends StatelessWidget {
   const VitCodeBlock({
