@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:vit_markdown/components/atoms/vit_code_block.dart';
 import 'package:vit_markdown/components/atoms/vit_list_block.dart';
@@ -21,6 +23,9 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scrollBehavior: MaterialScrollBehavior().copyWith(
+        dragDevices: PointerDeviceKind.values.toSet(),
+      ),
       home: Scaffold(
         body: SafeArea(
           child: Padding(
@@ -35,11 +40,7 @@ class _MainAppState extends State<MainApp> {
                     child: Wrap(
                       children: [
                         _codeBlock(),
-                        SizedBox(
-                          width: 250,
-                          height: 300,
-                          child: _listBlock(),
-                        ),
+                        _listBlock(),
                       ],
                     ),
                   ),
@@ -52,9 +53,11 @@ class _MainAppState extends State<MainApp> {
     );
   }
 
-  VitListBlock _listBlock() {
-    return VitListBlock(
-      markdownText: '''
+  Widget _listBlock() {
+    return SizedBox(
+      width: 250,
+      child: VitListBlock(
+        markdownText: '''
 • Level 1 item
 • Level 2 item
 • Level 3 item
@@ -64,31 +67,32 @@ class _MainAppState extends State<MainApp> {
 • Mixed nested item
   - [ ] Nested task
   • Level 1 with task list
-    - [ ] Nested task 1
-    - [x] Completed nested task
-''',
-      checkboxBuilder: (isChecked) {
-        return Container(
-          width: 16,
-          height: 16,
-          margin: EdgeInsets.only(right: 5),
-          child: Checkbox.adaptive(
-            value: isChecked,
-            onChanged: (v) {},
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            visualDensity: VisualDensity.compact,
-          ),
-        );
-      },
-      bulletBuilder: (type, level) {
-        return Container(
-          margin: EdgeInsets.only(right: 5),
-          child: Icon(
-            Icons.circle,
-            size: 8,
-          ),
-        );
-      },
+- [ ] Nested task 1
+- [x] Completed nested task
+    ''',
+        checkboxBuilder: (isChecked) {
+          return Container(
+            width: 16,
+            height: 16,
+            margin: EdgeInsets.only(right: 5),
+            child: Checkbox.adaptive(
+              value: isChecked,
+              onChanged: (v) {},
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              visualDensity: VisualDensity.compact,
+            ),
+          );
+        },
+        bulletBuilder: (type, level) {
+          return Container(
+            margin: EdgeInsets.only(right: 5),
+            child: Icon(
+              Icons.circle,
+              size: 8,
+            ),
+          );
+        },
+      ),
     );
   }
 
