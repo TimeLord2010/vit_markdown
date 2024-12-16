@@ -1,0 +1,4 @@
+enum MarkdownListType {
+  unordered,
+  ordered,
+}

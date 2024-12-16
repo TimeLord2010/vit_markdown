@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'vit_code_block_style.dart';
-import 'vit_list_style.dart';
+import 'vit_list_block_style.dart';
 
 class VitMarkdownStyle {
   final TextStyle h1Style;
@@ -14,7 +14,7 @@ class VitMarkdownStyle {
   final TextStyle boldTextStyle;
   final TextStyle italicTextStyle;
   final TextStyle underlineTextStyle;
-  final VitListStyle listStyle;
+  final VitListBlockStyle listStyle;
   final VitCodeBlockStyle codeBlockStyle;
 
   VitMarkdownStyle({
@@ -27,7 +27,7 @@ class VitMarkdownStyle {
     TextStyle? boldTextStyle,
     TextStyle? italicTextStyle,
     TextStyle? underlineTextStyle,
-    VitListStyle? listStyle,
+    VitListBlockStyle? listStyle,
     VitCodeBlockStyle? codeBlockStyle,
   })  : h1Style = h1Style ?? _defaultH1Style(),
         h2Style = h2Style ?? _defaultH2Style(),
@@ -38,7 +38,7 @@ class VitMarkdownStyle {
         boldTextStyle = boldTextStyle ?? _defaultBoldTextStyle(),
         italicTextStyle = italicTextStyle ?? _defaultItalicTextStyle(),
         underlineTextStyle = underlineTextStyle ?? _defaultUnderlineTextStyle(),
-        listStyle = listStyle ?? VitListStyle(),
+        listStyle = listStyle ?? VitListBlockStyle(),
         codeBlockStyle = VitCodeBlockStyle();
 
   static TextStyle _defaultH1Style() => const TextStyle(

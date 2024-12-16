@@ -1,77 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:vit_dart_extensions/vit_dart_extensions.dart';
+import 'package:vit_markdown/components/atoms/vit_list_block_theme.dart';
 
-// Enum to represent different types of lists
-enum MarkdownListType {
-  unordered,
-  ordered,
-  task,
-}
+import '../../data/enums/markdown_list_type.dart';
+import '../../data/theme/vit_list_block_style.dart';
 
-// Model class for list items
-class MarkdownListItem {
-  final String content;
-  final int level;
-  final MarkdownListType type;
-  final bool? isChecked; // For task lists
-  final List<MarkdownListItem> children = [];
-  final List<InlineSpan> formattedContent = []; // For styled text within items
-
-  MarkdownListItem({
-    required this.content,
-    required this.level,
-    required this.type,
-    this.isChecked,
-  });
-}
-
-class VitListBlock extends StatelessWidget {
+class VitListBlock extends StatefulWidget {
   final String markdownText;
-  final TextStyle? textStyle;
-  final double indentSize;
-  final double verticalSpacing;
-  final Widget Function(MarkdownListType type, int level)? bulletBuilder;
-  final Widget Function(bool? isChecked)? checkboxBuilder;
+  final VitListBlockStyle? style;
 
   const VitListBlock({
     super.key,
     required this.markdownText,
-    this.textStyle,
-    this.indentSize = 8,
-    this.verticalSpacing = 4,
-    this.bulletBuilder,
-    this.checkboxBuilder,
+    this.style,
   });
 
   @override
+  State<VitListBlock> createState() => _VitListBlockState();
+}
+
+class _VitListBlockState extends State<VitListBlock> {
+  VitListBlockStyle get style {
+    if (widget.style != null) return widget.style!;
+    var style = VitListBlockTheme.of(context);
+    return style;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var lines = markdownText.split('\n');
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (var line in lines) _parseLine(line),
-      ].separatedBy(SizedBox(height: verticalSpacing)),
+    var style = this.style;
+    var lines = widget.markdownText.split('\n');
+    return Container(
+      padding: style.padding,
+      margin: style.margin,
+      color: style.backgroundColor,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (var line in lines) _parseLine(line),
+        ].separatedBy(SizedBox(height: style.verticalSpacing)),
+      ),
     );
   }
 
   Widget _parseLine(String line) {
+    var style = this.style;
     var spacePattern = RegExp(r'^\s+\S');
-    var ident = spacePattern.stringMatch(line) ?? '';
-    ident = RegExp(r'\s+').stringMatch(ident) ?? '';
-    var identCount = ident.length;
+    var indent = spacePattern.stringMatch(line) ?? '';
+    indent = RegExp(r'\s+').stringMatch(indent) ?? '';
+    var indentCount = indent.length;
 
     List<Widget> getPreffix() {
       List<Widget> prefixWidgets = [];
 
       // Handle bullet points
+      var textColor = style.textStyle?.color ?? Color.fromARGB(255, 0, 0, 0);
+      var bulletBuilder = style.bulletBuilder;
       if (bulletBuilder != null) {
-        // Handle ordered lists (numbers followed by dot or parenthesis)
-        final orderedPattern = RegExp(r'^\s*\d+[.)] ');
-        if (orderedPattern.hasMatch(line)) {
+        // Handle ordered lists (including decimal notation like 1.2.3)
+        final orderedPattern = RegExp(r'^\s*(\d+(?:\.\d+)*)[.)] ');
+        final orderedMatch = orderedPattern.firstMatch(line);
+        if (orderedMatch != null) {
+          // Extract the full number string (including decimal notation)
+          final numberStr = orderedMatch.group(1)!;
+
           // Remove the number and separator from the line
           line = line.replaceFirst(orderedPattern, '').trim();
-          prefixWidgets
-              .add(bulletBuilder!(MarkdownListType.ordered, identCount));
+          prefixWidgets.add(
+              bulletBuilder(textColor, MarkdownListType.ordered, numberStr));
         } else {
           // Handle unordered lists
           final bulletPattern = RegExp(r'^\s*[-*•]\s');
@@ -79,12 +75,13 @@ class VitListBlock extends StatelessWidget {
             // Remove the bullet point from the line
             line = line.replaceFirst(bulletPattern, '').trim();
             prefixWidgets
-                .add(bulletBuilder!(MarkdownListType.unordered, identCount));
+                .add(bulletBuilder(textColor, MarkdownListType.unordered, ''));
           }
         }
       }
 
       // Handle checkboxes - can appear with or without bullets
+      var checkboxBuilder = style.checkboxBuilder;
       if (checkboxBuilder != null) {
         final checkboxPattern = RegExp(r'\[([ xX])\]');
         final match = checkboxPattern.firstMatch(line);
@@ -95,7 +92,7 @@ class VitListBlock extends StatelessWidget {
 
           // Remove the checkbox from the line
           line = line.replaceFirst(checkboxPattern, '').trim();
-          prefixWidgets.add(checkboxBuilder!(isChecked));
+          prefixWidgets.add(checkboxBuilder(isChecked));
         }
       }
 
@@ -112,9 +109,9 @@ class VitListBlock extends StatelessWidget {
 
     return Row(
       children: [
-        for (var i = 0; i < identCount; i++) SizedBox(width: indentSize),
+        for (var i = 0; i < indentCount; i++) SizedBox(width: style.indentSize),
         ...preffix,
-        Text(line, style: textStyle),
+        Text(line, style: style.textStyle),
       ],
     );
   }

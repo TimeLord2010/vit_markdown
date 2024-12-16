@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'theme_colors.dart';
+
 class VitCodeBlockStyle {
   final Color backgroundColor;
   final EdgeInsets margin;
@@ -34,7 +36,7 @@ class VitCodeBlockStyle {
     TextStyle? variableStyle,
     BorderRadiusGeometry? borderRadius,
   })  : rootTextStyle = rootTextStyle ?? _defaultTextStyle,
-        backgroundColor = backgroundColor ?? _defaultBackgroundColor,
+        backgroundColor = backgroundColor ?? ThemeColors.light.backgroundColor,
         borderRadius =
             borderRadius ?? const BorderRadius.all(Radius.circular(4)),
         margin = margin ?? _defaultMargin,
@@ -66,7 +68,7 @@ class VitCodeBlockStyle {
     return VitCodeBlockStyle(
       margin: margin ?? _defaultMargin,
       padding: padding ?? _defaultPadding,
-      backgroundColor: backgroundColor ?? const Color.fromARGB(255, 29, 29, 29),
+      backgroundColor: backgroundColor ?? ThemeColors.dark.backgroundColor,
       classIdentifierStyle: classIdentifierStyle ??
           const TextStyle(
             color: Color.fromARGB(255, 66, 189, 162),
@@ -111,10 +113,6 @@ class VitCodeBlockStyle {
       fontFamily: 'monospace',
       fontSize: 14,
     );
-  }
-
-  static Color get _defaultBackgroundColor {
-    return const Color.fromARGB(255, 253, 253, 253);
   }
 
   static EdgeInsets get _defaultMargin => const EdgeInsets.all(8.0);

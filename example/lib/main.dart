@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:vit_markdown/components/atoms/vit_code_block.dart';
 import 'package:vit_markdown/components/atoms/vit_list_block.dart';
+import 'package:vit_markdown/data/enums/markdown_list_type.dart';
 import 'package:vit_markdown/data/theme/vit_code_block_style.dart';
+import 'package:vit_markdown/data/theme/vit_list_block_style.dart';
 
 void main() {
   runApp(const MainApp());
@@ -18,7 +20,44 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   bool isDarkTheme = true;
-  VitCodeBlockStyle style = VitCodeBlockStyle.dark();
+
+  var checkboxBuilder = (isChecked) {
+    return Container(
+      width: 16,
+      height: 16,
+      margin: EdgeInsets.only(right: 5),
+      child: Checkbox.adaptive(
+        value: isChecked,
+        onChanged: (v) {},
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: VisualDensity.compact,
+      ),
+    );
+  };
+  var bulletBuilder = (Color textColor, MarkdownListType type, String preffix) {
+    if (type == MarkdownListType.unordered) {
+      return Container(
+        margin: EdgeInsets.only(right: 5),
+        child: Icon(
+          Icons.circle,
+          color: textColor,
+          size: 6,
+        ),
+      );
+    }
+    return Text(
+      '$preffix. ',
+      style: TextStyle(
+        color: textColor,
+      ),
+    );
+  };
+
+  var codeStyle = VitCodeBlockStyle.dark();
+  late var listStyle = VitListBlockStyle.dark(
+    bulletBuilder: bulletBuilder,
+    checkboxBuilder: checkboxBuilder,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -64,34 +103,14 @@ class _MainAppState extends State<MainApp> {
 • Another level 1 item
   1. Nested ordered item
   2. Another ordered item
+    2.1. Nested item
 • Mixed nested item
   - [ ] Nested task
   • Level 1 with task list
 - [ ] Nested task 1
 - [x] Completed nested task
     ''',
-        checkboxBuilder: (isChecked) {
-          return Container(
-            width: 16,
-            height: 16,
-            margin: EdgeInsets.only(right: 5),
-            child: Checkbox.adaptive(
-              value: isChecked,
-              onChanged: (v) {},
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              visualDensity: VisualDensity.compact,
-            ),
-          );
-        },
-        bulletBuilder: (type, level) {
-          return Container(
-            margin: EdgeInsets.only(right: 5),
-            child: Icon(
-              Icons.circle,
-              size: 8,
-            ),
-          );
-        },
+        style: listStyle,
       ),
     );
   }
@@ -106,9 +125,17 @@ class _MainAppState extends State<MainApp> {
           onChanged: (value) {
             isDarkTheme = value;
             if (value) {
-              style = VitCodeBlockStyle.dark();
+              codeStyle = VitCodeBlockStyle.dark();
+              listStyle = VitListBlockStyle.dark(
+                bulletBuilder: bulletBuilder,
+                checkboxBuilder: checkboxBuilder,
+              );
             } else {
-              style = VitCodeBlockStyle();
+              codeStyle = VitCodeBlockStyle();
+              listStyle = VitListBlockStyle(
+                bulletBuilder: bulletBuilder,
+                checkboxBuilder: checkboxBuilder,
+              );
             }
             setState(() {});
           },
@@ -139,7 +166,7 @@ class Person {
 }
           ''',
       language: 'dart',
-      style: style,
+      style: codeStyle,
     );
   }
 }
