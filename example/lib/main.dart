@@ -3,9 +3,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:vit_markdown/components/atoms/vit_code_block.dart';
 import 'package:vit_markdown/components/atoms/vit_list_block.dart';
+import 'package:vit_markdown/components/atoms/vit_table_block.dart';
 import 'package:vit_markdown/data/enums/markdown_list_type.dart';
 import 'package:vit_markdown/data/theme/vit_code_block_style.dart';
 import 'package:vit_markdown/data/theme/vit_list_block_style.dart';
+import 'package:vit_markdown/data/theme/vit_table_block_style.dart';
 
 void main() {
   runApp(const MainApp());
@@ -80,6 +82,16 @@ class _MainAppState extends State<MainApp> {
                       children: [
                         _codeBlock(),
                         _listBlock(),
+                        VitTableBlock(
+                          markdownTable: '''
+| Name | Age | City |
+|------|-----|------|
+| John | 25  | NYC  |
+| Jane | 30  | LA   |
+| Bob  | 35  | SF   |
+''',
+                          style: VitTableBlockStyle(),
+                        ),
                       ],
                     ),
                   ),
