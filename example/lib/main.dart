@@ -84,13 +84,19 @@ class _MainAppState extends State<MainApp> {
                         _listBlock(),
                         VitTableBlock(
                           markdownTable: '''
-| Name | Age | City |
-|------|-----|------|
-| John | 25  | NYC  |
-| Jane | 30  | LA   |
-| Bob  | 35  | SF   |
+| Name | Age | City | Country |
+|------|-----|------| ------ |
+| John | 25  | NYC  | USA
+| Jane | 30  | LA   | USA
+| Bob  | 35  | SF   | USA
+| Vini | 27  | FOR | BR
 ''',
-                          style: VitTableBlockStyle(),
+                          style: VitTableBlockStyle(
+                            headerBorder: Border.all(
+                              color: Colors.red,
+                              width: 1,
+                            ),
+                          ),
                         ),
                       ],
                     ),

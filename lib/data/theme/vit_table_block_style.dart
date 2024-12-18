@@ -19,13 +19,13 @@ class VitTableBlockStyle {
     BorderRadius? borderRadius,
   })  : cellBorder = cellBorder ??
             Border(
-                // top: BorderSide(
-                //   color: const Color.fromARGB(255, 0, 0, 0),
-                // ),
-                // bottom: BorderSide(
-                //   color: const Color.fromARGB(255, 0, 0, 0),
-                // ),
-                ),
+              top: BorderSide(
+                color: const Color.fromARGB(255, 0, 0, 0),
+              ),
+              bottom: BorderSide(
+                color: const Color.fromARGB(255, 0, 0, 0),
+              ),
+            ),
         headerBorder = headerBorder ??
             Border.all(color: const Color.fromARGB(255, 0, 0, 0)),
         cellBackgroundColor = cellBackgroundColor ?? Colors.white,
@@ -47,7 +47,6 @@ class VitTableBlockStyle {
               Radius.circular(4),
             );
 
-  // Copy with method for easy style modifications
   VitTableBlockStyle copyWith({
     Border? cellBorder,
     Border? headerBorder,

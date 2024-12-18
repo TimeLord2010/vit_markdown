@@ -10,7 +10,7 @@ class VitTableBlock extends StatelessWidget {
     super.key,
     required this.markdownTable,
     VitTableBlockStyle? style,
-  }) : style = VitTableBlockStyle();
+  }) : style = style ?? VitTableBlockStyle();
 
   @override
   Widget build(BuildContext context) {
@@ -19,25 +19,22 @@ class VitTableBlock extends StatelessWidget {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: style.headerBorder.top.color,
-            width: style.cellBorder.top.width,
-          ),
-          borderRadius: style.borderRadius, // Add this line
-        ),
-        child: ClipRRect(
-          // Add this wrapper
-          borderRadius: style.borderRadius,
-          child: Table(
-            defaultColumnWidth: const IntrinsicColumnWidth(),
-            children: _buildTableRows(tableData),
-            border: TableBorder(
-              horizontalInside: style.cellBorder.top,
-              verticalInside: style.cellBorder.left,
-            ),
-          ),
+      child: ClipRRect(
+        borderRadius: style.borderRadius,
+        child: Table(
+          defaultColumnWidth: const IntrinsicColumnWidth(),
+          children: _buildTableRows(tableData),
+          border: TableBorder(
+              // top: style.headerBorder.top,
+              // horizontalInside: BorderSide(
+              //   color: style.cellBorder.top.color,
+              //   width: style.cellBorder.top.width,
+              // ),
+              // bottom: style.cellBorder.bottom,
+              // left: style.cellBorder.left,
+              // right: style.cellBorder.right,
+              // verticalInside: style.cellBorder.left,
+              ),
         ),
       ),
     );
@@ -48,13 +45,41 @@ class VitTableBlock extends StatelessWidget {
 
     for (var i = 0; i < tableData.length; i++) {
       final isHeader = i == 0;
+      var isFirstRow = i == 1;
+
+      Color getBackgroundColor() {
+        if (isHeader) {
+          return style.headerBackgroundColor;
+        }
+        return style.cellBackgroundColor;
+      }
+
+      BoxBorder? getBorder() {
+        if (isHeader) {
+          return style.headerBorder;
+        }
+        if (!isFirstRow) {
+          return style.cellBorder;
+        }
+        return null;
+      }
+
+      BorderRadiusGeometry? getBorderRadius() {
+        if (isHeader) {
+          return BorderRadius.only(
+            topLeft: style.borderRadius.topLeft,
+            topRight: style.borderRadius.topRight,
+          );
+        }
+        return null;
+      }
 
       rows.add(
         TableRow(
           decoration: BoxDecoration(
-            color: isHeader
-                ? style.headerBackgroundColor
-                : style.cellBackgroundColor,
+            color: getBackgroundColor(),
+            border: getBorder(),
+            borderRadius: getBorderRadius(),
           ),
           children: tableData[i].map((cell) {
             return Padding(
