@@ -33,12 +33,7 @@ class BlocksPage extends StatelessWidget {
 | Bob  | 35  | SF   | USA
 | Vini | 27  | FOR | BR
       ''',
-      style: VitTableBlockStyle(
-        headerBorder: Border.all(
-          color: Colors.red,
-          width: 1,
-        ),
-      ),
+      style: VitTableBlockStyle(),
     );
   }
 

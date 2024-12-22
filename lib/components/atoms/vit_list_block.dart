@@ -33,7 +33,10 @@ class _VitListBlockState extends State<VitListBlock> {
     return Container(
       padding: style.padding,
       margin: style.margin,
-      color: style.backgroundColor,
+      decoration: BoxDecoration(
+        borderRadius: style.borderRadius,
+        color: style.backgroundColor,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -1,1 +1,1 @@
-//export 'package:vit_markdown/components/'
+export 'package:vit_markdown/components/organisms/vit_markdown.dart';

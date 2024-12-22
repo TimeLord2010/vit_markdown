@@ -36,6 +36,7 @@ class _MainAppState extends State<MainApp> {
         child: Scaffold(
           appBar: AppBar(
             title: const Text('Vit Markdown'),
+            centerTitle: false,
             actions: [
               ThemeSwitcher(
                 isDarkTheme: isDarkTheme,

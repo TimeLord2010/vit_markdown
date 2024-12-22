@@ -5,6 +5,7 @@ import 'theme_colors.dart';
 
 class VitListBlockStyle {
   final Color backgroundColor;
+  final BorderRadiusGeometry borderRadius;
   final EdgeInsets margin;
   final EdgeInsets padding;
   final TextStyle? textStyle;
@@ -23,11 +24,13 @@ class VitListBlockStyle {
     EdgeInsets? padding,
     EdgeInsets? margin,
     Color? backgroundColor,
+    BorderRadiusGeometry? borderRadius,
   })  : backgroundColor = backgroundColor ?? ThemeColors.light.backgroundColor,
         padding = padding ?? const EdgeInsets.all(8),
         margin = margin ?? const EdgeInsets.all(8),
         indentSize = indentSize ?? 8,
-        verticalSpacing = verticalSpacing ?? 4;
+        verticalSpacing = verticalSpacing ?? 4,
+        borderRadius = borderRadius ?? BorderRadius.circular(4);
 
   factory VitListBlockStyle.dark({
     EdgeInsets? padding,
